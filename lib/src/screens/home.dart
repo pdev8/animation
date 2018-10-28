@@ -17,27 +17,22 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     // This controller controls the animation; it has the ability
     // to start, stop, or restart the animation
     catController = AnimationController(
-      // Animation of cat going up/down to last 2 seconds
-      duration: Duration(
-        seconds: 2
-      ),
-      // @required TickerProvider vsync
-      // The ticker provider is like a handle from the outside that
-      // has the ability to reach in and tell the animation to progress
-      // along and render the next frame of the animation
-      vsync: this
-    );
+        // Animation of cat going up/down to last 2 seconds
+        duration: Duration(seconds: 2),
+        // @required TickerProvider vsync
+        // The ticker provider is like a handle from the outside that
+        // has the ability to reach in and tell the animation to progress
+        // along and render the next frame of the animation
+        vsync: this);
 
     // Tween describes the range that the value being animated spans
     // Will change the elevation of the cat from 0 to 100
-    catAnimation = Tween(begin: 0.0, end: 100.0)
-      .animate(
+    catAnimation = Tween(begin: 0.0, end: 100.0).animate(
         // The rate in which the animated value will change
-        CurvedAnimation(
-          parent: catController,
-          curve: Curves.easeIn
-        )
-      );
+        CurvedAnimation(parent: catController, curve: Curves.easeIn));
+
+    // Starts the animation
+    catController.forward();
   }
 
   Widget build(context) {
@@ -46,6 +41,20 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   Widget buildAnimation() {
-    return Cat();
+    return AnimatedBuilder(
+        animation: catAnimation,
+        // In a StreamBuilder, a widget was returned, but it doesn't make sense
+        // to use it in this scenario because we will be changing the value frequently
+        builder: (context, child) {
+          // The only way we can rerender the screen is by creating a new widget
+          // Recreating a Container is better than recreating the more expensive Cat
+          // widget
+          return Container(
+              child: child,
+              // If we used 'bottom', the box would move downwards
+              margin: EdgeInsets.only(top: catAnimation.value));
+        },
+        // Declares the child widget only once and will better in terms of performance
+        child: Cat());
   }
 }
