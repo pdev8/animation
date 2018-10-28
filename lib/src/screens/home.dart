@@ -17,8 +17,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     // This controller controls the animation; it has the ability
     // to start, stop, or restart the animation
     catController = AnimationController(
-        // Animation of cat going up/down to last 2 seconds
-        duration: Duration(seconds: 2),
+        // Animation of cat going up/down to last x seconds
+        duration: Duration(milliseconds: 200),
         // @required TickerProvider vsync
         // The ticker provider is like a handle from the outside that
         // has the ability to reach in and tell the animation to progress
@@ -27,7 +27,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 
     // Tween describes the range that the value being animated spans
     // Will change the elevation of the cat from 0 to 100
-    catAnimation = Tween(begin: 0.0, end: 100.0).animate(
+    catAnimation = Tween(begin: -35.0, end: -80.0).animate(
         // The rate in which the animated value will change
         CurvedAnimation(parent: catController, curve: Curves.easeIn));
   }
@@ -52,7 +52,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             child: Center(
                 // Whatever is last in the array, shows on top
                 child: Stack(
-              children: <Widget>[buildCatAnimation(), buildBox()],
+                  overflow: Overflow.visible,
+                  children: <Widget>[buildCatAnimation(), buildBox()],
             )),
             onTap: onTap));
   }
@@ -66,10 +67,12 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           // The only way we can rerender the screen is by creating a new widget
           // Recreating a Container is better than recreating the more expensive Cat
           // widget
-          return Container(
+          return Positioned(
               child: child,
               // If we used 'bottom', the box would move downwards
-              margin: EdgeInsets.only(top: catAnimation.value));
+              top: catAnimation.value,
+              right: 0.0,
+              left: 0.0);
         },
         // Declares the child widget only once and will better in terms of performance
         child: Cat());

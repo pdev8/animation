@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 
 void main() {
   // When enabled, will show constraints around containers
-  debugPaintSizeEnabled = true;
+  //debugPaintSizeEnabled = true;
 
   runApp(App());
 }
