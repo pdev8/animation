@@ -30,14 +30,24 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     catAnimation = Tween(begin: 0.0, end: 100.0).animate(
         // The rate in which the animated value will change
         CurvedAnimation(parent: catController, curve: Curves.easeIn));
+  }
 
+  // Animation will begin on tap
+  onTap() {
     // Starts the animation
     catController.forward();
   }
 
   Widget build(context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Animation!')), body: buildAnimation());
+        appBar: AppBar(title: Text('Animation!')), 
+        // Anytime a user taps on anything that is a child of this gesture
+        // animation/detector, the tap event will bubble up until it reaches
+        // the GestureDetector (IMPORTANT because - the tap event on the box will bubble up)
+        body: GestureDetector(
+          child: buildAnimation(),
+          onTap: onTap
+        ));
   }
 
   Widget buildAnimation() {
