@@ -34,8 +34,13 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 
   // Animation will begin on tap
   onTap() {
+    if (catController.status == AnimationStatus.completed) {
+      catController.reverse();
+    } 
+    else if (catController.status == AnimationStatus.dismissed) {
     // Starts the animation
-    catController.forward();
+      catController.forward();
+    }
   }
 
   Widget build(context) {
