@@ -36,26 +36,28 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
   onTap() {
     if (catController.status == AnimationStatus.completed) {
       catController.reverse();
-    } 
-    else if (catController.status == AnimationStatus.dismissed) {
-    // Starts the animation
+    } else if (catController.status == AnimationStatus.dismissed) {
+      // Starts the animation
       catController.forward();
     }
   }
 
   Widget build(context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Animation!')), 
+        appBar: AppBar(title: Text('Animation!')),
         // Anytime a user taps on anything that is a child of this gesture
         // animation/detector, the tap event will bubble up until it reaches
         // the GestureDetector (IMPORTANT because - the tap event on the box will bubble up)
         body: GestureDetector(
-          child: buildAnimation(),
-          onTap: onTap
-        ));
+            child: Center(
+                // Whatever is last in the array, shows on top
+                child: Stack(
+              children: <Widget>[buildCatAnimation(), buildBox()],
+            )),
+            onTap: onTap));
   }
 
-  Widget buildAnimation() {
+  Widget buildCatAnimation() {
     return AnimatedBuilder(
         animation: catAnimation,
         // In a StreamBuilder, a widget was returned, but it doesn't make sense
@@ -71,5 +73,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         },
         // Declares the child widget only once and will better in terms of performance
         child: Cat());
+  }
+
+  Widget buildBox() {
+    return Container(height: 200.0, width: 200.0, color: Colors.brown);
   }
 }
